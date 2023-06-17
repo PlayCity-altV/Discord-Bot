@@ -1,4 +1,5 @@
 ﻿using DSharpPlus;
+using DSharpPlus.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PlayCityDiscordBot.Config;
@@ -41,6 +42,14 @@ namespace PlayCityDiscordBot
                 .BuildServiceProvider(true);
 
             serviceProvider.ResolveCommands(config);
+
+            discordClient.GuildMemberAdded += (sender, args) =>
+            {
+                var guestRole = args.Guild.GetRole(1105896328787136602);
+                args.Member.GrantRoleAsync(guestRole);
+                
+                return Task.CompletedTask;
+            };
 
             await discordClient.ConnectAsync();
             await Task.Delay(-1);
