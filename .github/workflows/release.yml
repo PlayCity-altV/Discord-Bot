@@ -46,6 +46,9 @@ jobs:
           context: .
           push: true
           tags: docker.pkg.github.com/playcity-altv/playcitydiscordbot:latest
+          registry: docker.pkg.github.com
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
   
   publish:
     needs: deploy
