@@ -22,9 +22,33 @@ jobs:
         with:
           name: build
           path: PlayCityDiscordBot/Artifacts/build
-  
+          
   deploy:
     needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: docker.pkg.github.com
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: docker.pkg.github.com/${{ github.repository }}/playcitydiscordbot:latest
+  
+  publish:
+    needs: deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v2
@@ -61,30 +85,18 @@ jobs:
         with:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
-          
+
       - name: Adding Known Hosts
         run: ssh-keyscan -p 41140 -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Copy server files
-        uses: appleboy/scp-action@v0.1.4
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: playcity
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: 41140
-          source: "PlayCityDiscordBot/Artifacts/build/*"
-          strip_components: 3
-          target: "/home/playcity/discordBot"
-          timeout: 5m
-
-      - name: Set up files in host
+      - name: Publish update in discord
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.SSH_HOST }}
           port: 41140
           username: playcity
           password: ${{ secrets.SSH_PASSWORD }}
-          script: "cd /home/playcity/discordBot && chmod +x PlayCityDiscordBot && cd /home/playcity/deployUpdates && ./PlayCityDeployUpdates --project DiscordBot"
+          script: "cd /home/playcity/deployUpdates && ./PlayCityDeployUpdates --project DiscordBot"
   
   remove-old-artifacts:
     needs: deploy
