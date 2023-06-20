@@ -45,10 +45,10 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/playcity-altv/playcitydiscordbot:latest
+          tags: ghcr.io/playcity-altv/discordbot:latest
   
   publish:
-    needs: deploy
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v2
@@ -99,7 +99,7 @@ jobs:
           script: "cd /home/playcity/deployUpdates && ./PlayCityDeployUpdates --project DiscordBot"
   
   remove-old-artifacts:
-    needs: deploy
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
     
