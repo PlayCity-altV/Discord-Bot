@@ -51,25 +51,11 @@ namespace PlayCityDiscordBot
                 
                 return Task.CompletedTask;
             };
-            
-            
-            // var url = "http://localhost:5000/api/server/restart";
-            //
-            // using (var httpClient = new HttpClient())
-            // {
-            //     var response = await httpClient.GetAsync(url);
-            //
-            //     if (response.IsSuccessStatusCode)
-            //     {
-            //         Console.WriteLine("Server restarted successfully"); 
-            //     }
-            //     else
-            //     {
-            //         Console.WriteLine($"Ошибка при выполнении запроса: {response.StatusCode}");
-            //     }
-            // }
-            
+
             await discordClient.ConnectAsync();
+            
+            Console.WriteLine("Play City Discord Bot Started");
+            
             await Task.Delay(-1);
         }
     }
