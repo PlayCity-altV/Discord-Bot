@@ -36,7 +36,7 @@ namespace PlayCityDiscordBot
                 if (type.GetCustomAttribute<DebugCommandAttribute>() is null)
                     slashCommands.RegisterCommands(type);
                 else
-                    slashCommands.RegisterCommands(type, ulong.Parse(config.Entries.GuildId));
+                    slashCommands.RegisterCommands(type, ulong.Parse(config.Entries.Guild.GuildId));
             }
         }
     }

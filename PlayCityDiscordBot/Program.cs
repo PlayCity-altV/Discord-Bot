@@ -1,5 +1,4 @@
 ﻿using DSharpPlus;
-using DSharpPlus.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PlayCityDiscordBot.Config;
@@ -41,16 +40,35 @@ namespace PlayCityDiscordBot
                 .AddSingleton(typeof(IConfig<>), typeof(Config<>))
                 .BuildServiceProvider(true);
 
+            var mainConfig = new Config<MainConfig>();
+            
             serviceProvider.ResolveCommands(config);
 
             discordClient.GuildMemberAdded += (sender, args) =>
             {
-                var guestRole = args.Guild.GetRole(1105896328787136602);
+                var guestRole = args.Guild.GetRole(ulong.Parse(mainConfig.Entries.Guild.GuestRoleId));
                 args.Member.GrantRoleAsync(guestRole);
                 
                 return Task.CompletedTask;
             };
-
+            
+            
+            // var url = "http://localhost:5000/api/server/restart";
+            //
+            // using (var httpClient = new HttpClient())
+            // {
+            //     var response = await httpClient.GetAsync(url);
+            //
+            //     if (response.IsSuccessStatusCode)
+            //     {
+            //         Console.WriteLine("Server restarted successfully"); 
+            //     }
+            //     else
+            //     {
+            //         Console.WriteLine($"Ошибка при выполнении запроса: {response.StatusCode}");
+            //     }
+            // }
+            
             await discordClient.ConnectAsync();
             await Task.Delay(-1);
         }
