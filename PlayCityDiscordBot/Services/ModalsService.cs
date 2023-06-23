@@ -26,8 +26,8 @@ public class ModalsService : IModalsService
 
     public async Task PostSuggestionMessage(DiscordClient sender, MessageCreateEventArgs e)
     {
-        // if (e.Message.Content.ToLower() != "create-suggestions-button".ToLower()) return;
-        if (e.Message.Author.IsBot) return; //todo
+        // if (e.Message.Content.ToLower() != "create-suggestions-button".ToLower()) return; //todo
+        if (e.Message.Channel.Id != 1121685169561161830 || e.Message.Author.Id != 310462724255514625) return;
 
         var guild = await sender.GetGuildAsync(ulong.Parse(this._config.Entries.Guild.GuildId));
 
