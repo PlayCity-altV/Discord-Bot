@@ -52,7 +52,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/playcity-altv/discordbot:${{ github.ref }}
+          tags: ghcr.io/playcity-altv/discordbot:${{ github.ref.replace('refs/tags/', '') }}
   
   publish:
     needs: build
