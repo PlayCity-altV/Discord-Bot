@@ -43,8 +43,9 @@ namespace PlayCityDiscordBot.SlashCommands
                 }
                 await ctx.DeleteResponseAsync();
             }
-            catch
+            catch (Exception e)
             {
+                Console.WriteLine(e);
                 await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("Невозможно получить лог"));
             }
         }
