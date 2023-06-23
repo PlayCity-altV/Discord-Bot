@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PlayCityDiscordBot.Config;
+using PlayCityDiscordBot.Services;
 
 namespace PlayCityDiscordBot
 {
@@ -38,12 +39,16 @@ namespace PlayCityDiscordBot
             var serviceProvider = new ServiceCollection()
                 .AddSingleton(discordClient)
                 .AddSingleton(typeof(IConfig<>), typeof(Config<>))
+                .AddSingleton<IModalsService, ModalsService>()
                 .BuildServiceProvider(true);
 
-            var mainConfig = new Config<MainConfig>();
-            
             serviceProvider.ResolveCommands(config);
+            var mainConfig = new Config<MainConfig>();
+            var modalsService = serviceProvider.GetService<IModalsService>()!;
 
+            discordClient.MessageCreated += modalsService.PostSuggestionMessage;
+            discordClient.ComponentInteractionCreated += modalsService.SuggestionsButtonPressed;
+            discordClient.ModalSubmitted += modalsService.SuggestionsModalSubmitted;
             discordClient.GuildMemberAdded += (sender, args) =>
             {
                 var guestRole = args.Guild.GetRole(ulong.Parse(mainConfig.Entries.Guild.GuestRoleId));
@@ -51,24 +56,7 @@ namespace PlayCityDiscordBot
                 
                 return Task.CompletedTask;
             };
-            
-            
-            // var url = "http://localhost:5000/api/server/restart";
-            //
-            // using (var httpClient = new HttpClient())
-            // {
-            //     var response = await httpClient.GetAsync(url);
-            //
-            //     if (response.IsSuccessStatusCode)
-            //     {
-            //         Console.WriteLine("Server restarted successfully"); 
-            //     }
-            //     else
-            //     {
-            //         Console.WriteLine($"Ошибка при выполнении запроса: {response.StatusCode}");
-            //     }
-            // }
-            
+
             await discordClient.ConnectAsync();
             await Task.Delay(-1);
         }
