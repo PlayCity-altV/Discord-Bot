@@ -23,7 +23,7 @@ namespace PlayCityDiscordBot
                 AutoReconnect = true,
                 MinimumLogLevel = LogLevel.Information,
                 Intents = DiscordIntents.Guilds | DiscordIntents.GuildMembers |
-                          DiscordIntents.GuildIntegrations | DiscordIntents.GuildMessages |
+                          DiscordIntents.GuildIntegrations | DiscordIntents.GuildMessages | DiscordIntents.MessageContents |
                           DiscordIntents.GuildPresences | DiscordIntents.GuildMessageReactions |
                           DiscordIntents.DirectMessages
             };
