@@ -1,0 +1,8 @@
+version: "3"
+services:
+  discordbot:
+    image: ghcr.io/playcity-altv/discordbot
+    container_name: discordbot
+    restart: unless-stopped
+    volumes:
+      - /home/playcity/discordBot/config.json:/app/config.json
