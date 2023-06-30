@@ -6,3 +6,4 @@ services:
     restart: unless-stopped
     volumes:
       - /home/playcity/discordBot/config.json:/app/config.json
+      - /home/playcity/altV/server.log:/app/server.log
