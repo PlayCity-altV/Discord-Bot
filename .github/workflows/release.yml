@@ -11,18 +11,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v3.0.3
         with:
           dotnet-version: 7.0.100-preview.7.22377.5
+          
       - name: Build
         run: dotnet publish PlayCityDiscordBot -c Release -r ubuntu.22.04-x64 -p:PublishSingleFile=true --self-contained true --output PlayCityDiscordBot/Artifacts/build
+      
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: build
           path: PlayCityDiscordBot/Artifacts/build
-          
+  
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -39,20 +42,13 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Build and Push Latest Docker Image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: ghcr.io/playcity-altv/discordbot:latest
-          
-      - name: Build and Push Tag Docker Image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/playcity-altv/discordbot:${{github.ref_name}}
+          tags: ghcr.io/playcity-altv/discordbot:latest,ghcr.io/playcity-altv/discordbot:${{github.ref_name}}
   
   publish:
     needs: build
