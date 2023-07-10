@@ -45,7 +45,7 @@ namespace PlayCityDiscordBot.SlashCommands
                     if (client.IsConnected)
                     {
                         await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("Сервер перезагружен"));
-                        client.RunCommand($"echo -e {this._config.Entries.Host.Password} | sudo -S systemctl restart altv");
+                        client.RunCommand($"echo -e {this._config.Entries.Host.Password} | sudo -S docker restart core");
                         client.Disconnect();
                     }
                 }
