@@ -1,7 +1,7 @@
 ﻿namespace PlayCityDiscordBot.Config
 {
     public record MainConfig(
-        string Token, GuildInfo Guild, HostInfo Host, string LogPath
+        string Token, GuildInfo Guild, HostInfo Host, string LogPath, string RedeployWebhook
     );
 
     public record GuildInfo(string GuildId, string GuestRoleId, string QaRoleId, string SuggestionChannelId);
