@@ -101,9 +101,9 @@ public class ModalsService : IModalsService
                 .WithAuthor("Suggestion")
                 .WithTitle($"From {e.Interaction.User.Username}")
                 .WithDescription(e.Values.Values.ToList()[0]) // user suggestion
-                .WithColor(new DiscordColor("#ff8500"))
+                .WithColor(new DiscordColor("#228ae5"))
                 .WithThumbnail(
-                    "https://media.discordapp.net/attachments/1105608698400882688/1105608728495018025/logo_no_bg.png");
+                    "https://cdn.discordapp.com/attachments/1105608698400882688/1223220213479116851/logo.png?ex=66190f99&is=66069a99&hm=02d2d015afae6aa5adc8486a947feff5d85ba8e58c71411bdcdcfaf1245a2b5d&");
 
             var message = await channel.SendMessageAsync(embed);
             var thread = await message.CreateThreadAsync("Discussion",
